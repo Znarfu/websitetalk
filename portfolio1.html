@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio 1 - Computer Science as Discipline, Computing Disciplines and Majors</title>
+    <link rel="icon" type="image/x-icon" href="/images/icon.png">
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.15.349/pdf.min.js"></script>
+</head>
+<body>
+    <header>
+    <a href="index.html" class ="logo">
+        <img src="images/tlogo.png" width="150" height="150" alt="Logo">
+    </a>
+        <h1>Computer Science as Discipline, Computing Disciplines and Majors</h1>
+        <img src="images/dog.png" width="237" height="237" class="dog">
+
+    </header>
+    <nav>
+        <a href="portfolio1.html">Portfolio 1</a>
+        <a href="portfolio2.html">Portfolio 2</a>
+        <a href="portfolio3.html">Portfolio 3</a>
+        <a href="portfolio4.html">Portfolio 4</a>
+        <a href="portfolio5.html">Portfolio 5</a>
+        <a href="portfolio6.html">Portfolio 6</a>
+        <a href="about.html">About</a>
+    </nav>
+    <main>
+        <h2>How broad Computer Science really is!</h2>
+        <p style="text-align:justify;">
+          Computer science is a dynamic and rapidly evolving discipline that serves as the foundation for countless innovations shaping our modern world. From designing efficient algorithms to developing intelligent systems, the field encompasses a wide range of topics that explore how computational processes can solve real-world problems. With applications spanning industries like healthcare, finance, entertainment, and education, computer science is at the heart of technological advancement, empowering individuals and organizations to create smarter, faster, and more connected systems.</p>
+         
+          <p style="text-align:justify;">This interactive guide dives into the diverse facets of computer science, offering an engaging exploration of key concepts, practical applications, and emerging trends. Whether you’re a curious learner, an aspiring professional, or an industry expert, this resource is designed to provide insights into the principles and possibilities of computation. Join us as we uncover the transformative power of computer science and its profound impact on the way we live, work, and interact with the world.</p>
+
+        <canvas id="pdf-render"></canvas>
+        <div class="nav-buttons">
+            <button id="prev-slide">Previous Slide</button>
+            <button id="next-slide">Next Slide</button>
+        </div>
+    </main>
+    <footer>
+        
+    </footer>
+
+    <script>
+       
+        const pdfUrl = './portfolios/Impas-G2-CIS1102N-Portfolio1.pdf'; 
+        let pdfDoc = null,
+            currentPage = 1,
+            totalPages = 0,
+            canvas = document.getElementById('pdf-render'),
+            ctx = canvas.getContext('2d');
+
+
+        const renderPage = (pageNum) => {
+            pdfDoc.getPage(pageNum).then((page) => {
+                const viewport = page.getViewport({ scale: 1.5 });
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                const renderCtx = {
+                    canvasContext: ctx,
+                    viewport: viewport,
+                };
+
+                page.render(renderCtx);
+            });
+
+            document.querySelector('#prev-slide').disabled = pageNum === 1;
+            document.querySelector('#next-slide').disabled = pageNum === totalPages;
+        };
+
+ 
+        pdfjsLib.getDocument(pdfUrl).promise.then((pdfDoc_) => {
+            pdfDoc = pdfDoc_;
+            totalPages = pdfDoc.numPages;
+            renderPage(currentPage);
+        });
+
+
+        document.getElementById('prev-slide').addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderPage(currentPage);
+            }
+        });
+
+        document.getElementById('next-slide').addEventListener('click', () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderPage(currentPage);
+            }
+        });
+    </script>
+
+</body>
+</html>
+

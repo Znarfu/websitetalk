@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio 2 - Data, Information, and Information Systems</title>
+    <link rel="icon" type="image/x-icon" href="/images/icon.png">
+
+    <link rel="stylesheet" href="style.css">
+
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.15.349/pdf.min.js"></script>
+</head>
+<body background>
+    <header>
+        <a href="index.html" class ="logo">
+            <img src="images/tlogo.png" width="150" height="150" alt="Logo">
+        </a>
+          <h1>Data, Information, and Information Systems</h1>
+          <img src="images/dognerd.png" width="237" height="237" class="dog">
+      </header>
+    <nav>
+        <a href="portfolio1.html">Portfolio 1</a>
+        <a href="portfolio2.html">Portfolio 2</a>
+        <a href="portfolio3.html">Portfolio 3</a>
+        <a href="portfolio4.html">Portfolio 4</a>
+        <a href="portfolio5.html">Portfolio 5</a>
+        <a href="portfolio6.html">Portfolio 6</a>
+        <a href="about.html">About</a>
+    </nav>
+    <main>
+        <h2>The Backbone of Progress!</h2>
+        <p>In today’s digital age, data and information form the core of how businesses and individuals make decisions, innovate, and communicate. This portfolio explores the intricate relationship between raw data, processed information, and the systems designed to manage them. Information systems act as the bridge that turns data into actionable insights, powering industries and driving technological advancements. Dive into the world of databases, software solutions, and the role they play in shaping our interconnected world.
+
+   
+        <canvas id="pdf-render"></canvas>
+        <div class="nav-buttons">
+            <button id="prev-slide">Previous Slide</button>
+            <button id="next-slide">Next Slide</button>
+        </div>
+    </main>
+    <footer>
+        
+    </footer>
+
+    <script>
+
+        const pdfUrl = './portfolios/Impas-G2-CIS1102N-Portfolio2.pdf'; 
+        let pdfDoc = null,
+            currentPage = 1,
+            totalPages = 0,
+            canvas = document.getElementById('pdf-render'),
+            ctx = canvas.getContext('2d');
+
+
+        const renderPage = (pageNum) => {
+            pdfDoc.getPage(pageNum).then((page) => {
+                const viewport = page.getViewport({ scale: 1.5 });
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                const renderCtx = {
+                    canvasContext: ctx,
+                    viewport: viewport,
+                };
+
+                page.render(renderCtx);
+            });
+
+            document.querySelector('#prev-slide').disabled = pageNum === 1;
+            document.querySelector('#next-slide').disabled = pageNum === totalPages;
+        };
+
+        
+        pdfjsLib.getDocument(pdfUrl).promise.then((pdfDoc_) => {
+            pdfDoc = pdfDoc_;
+            totalPages = pdfDoc.numPages;
+            renderPage(currentPage);
+        });
+
+     
+        document.getElementById('prev-slide').addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderPage(currentPage);
+            }
+        });
+
+        document.getElementById('next-slide').addEventListener('click', () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderPage(currentPage);
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+
